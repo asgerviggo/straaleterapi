@@ -1,41 +1,59 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 
-const generatePagesCollection = (path: String) => defineCollection({
+const createPageCollection = (source: {
+  include: string,
+  prefix?: string,
+  exclude?: string[]
+}) => defineCollection({
       type: 'page',
-      source: [{
-        include: `${path}/**/*.md`,
-      }],
-      schema: z.object({
-        title: z.string(),
-      })
-    }) 
+      source: {
+        // repository: {
+        //   url: 'https://github.com/asgerviggo/DCCC-content.git',
+        //   branch: 'main',
+        // },
+        ...source,
+      },
+    })
 
 export default defineContentConfig({
   collections: {
-    about: generatePagesCollection('om-os'),
-    research: generatePagesCollection('forskning'),
-    radiotherapy: generatePagesCollection('straaleterapi'),
-    cancers: defineCollection({
-      type: 'page',
-      source: [{
-        include: 'cancers/*.md',
-      }],
-    }),
-    news: defineCollection({
-      type: 'page',
-      source: [{
-        include: 'news/*.md',
-      }],
-    }),
-    publications: defineCollection({
-      type: 'data',
-      source: [{
-        include: 'publications/*.md',
-      }],
+    main: {
       schema: z.object({
-        id: z.string(),
-        toc: z.string()
+        title: z.string(),
+      }),
+      ...createPageCollection({
+        include: '**/*.md',
+        exclude: ['db']
+      }), 
+    },
+    cancers: {
+      schema: z.object({
+        title: z.string(),
+      }),
+      ...createPageCollection({
+        include: 'db/cancers/*.md',
+        prefix: "/",
       })
-    }),
+    },
+    news: {
+      schema: z.object({
+        title: z.string(),
+        date: z.date(),
+      }),
+      ...createPageCollection({
+        include: 'db/news/*.md',
+        prefix: "/",
+      })
+    },
+    // publications: {
+    //   schema: z.object({
+    //     authors: z.array(z.string()),
+    //     url: z.string()
+    //   }),
+    //   ...createPageCollection({
+    //     include: 'db/publications/*.md',
+    //     prefix: "/",
+    //   })
+    // },
   }
 })
