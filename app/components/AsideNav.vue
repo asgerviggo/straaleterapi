@@ -1,8 +1,6 @@
 <style scoped lang="scss">
 .nav-wrapper {
   margin-left: 1rem;
-  display: flex;
-  flex-direction: column;
 }
 .nav-item {
 
@@ -12,7 +10,7 @@
 <template>
   <div class="header-wrapper">
     <a id="logo" href="/"></a>
-    <nav class="nav-wrapper">
+    <nav class="nav-wrapper col">
       <template v-for="nav in navs">
         <div class="nav-item">
           <NuxtLink :to="nav.path">{{ nav.title }}</NuxtLink>

@@ -7,8 +7,6 @@
   }
 }
 .header-wrapper {
-  display: flex;
-  flex-direction: row;
   padding: 0.7rem;
   
 }
@@ -17,15 +15,11 @@
   text-transform: uppercase;
   margin: 1rem;
 }
-.navigation {
-  display: flex;
-  flex-direction: row;
-}
 
 </style>
 
 <template>
-  <div class="header-wrapper">
+  <div class="header-wrapper row">
     <div class="logo">
       <a :href="`/${lang}`">
         <!-- This is the english logo, change depending on language -->
@@ -33,7 +27,7 @@
       </a>
     </div>
     <div class="nav-wrapper">
-      <nav class="navigation">
+      <nav class="row">
         <div v-for="nav in navs" class="nav-item">
           <NuxtLink :to="nav.path">{{ nav.title }}</NuxtLink>
         </div>

@@ -1,7 +1,9 @@
 <style scoped lang="scss">
   @use '~/assets/css/colors';
+  @use '~/assets/css/util';
 
   footer {
+    @extend .col;
     background: colors.$blue;
     color: colors.$white;
     a {
@@ -10,13 +12,7 @@
     display: flex;
     flex-direction: column;
   }
-  .top {
-    display: flex;
-    flex-direction: row;
-  }
   .column {
-    display: flex;
-    flex-direction: column;
     flex: 1;
     margin: 2rem;
     text-align: center;
@@ -42,18 +38,18 @@
 
 <template>
   <footer>
-    <div class="top">
-      <div class="column left">
+    <div class="row">
+      <div class="column left col">
         <span class="current-domain">DCCC stråleterapi</span>
         <a rel="noopener" href="/om-os/tilgaengelighedserklaering/" target="_blank" title="Tilgængelighedserklæring - webtilgængelighed">Tilgængelighedserklæring - webtilgængelighed</a>
       </div>
-      <div class="column">
+      <div class="column col">
           <span>Nationalt forskningscenter for stråleterapi</span>
           <span>Støttet af Kræftens Bekæmpelse</span>
           <span>En del af Danish Comprehensive Cancer Center</span>
           <span>Mere forskning - bedre behandling - færre bivirkninger</span>
       </div>
-      <div class="column">
+      <div class="column col">
         <span class="contact">Kontakt os på:</span>
         <a rel="noopener" href="mailto:mail@straaleterapi.dk" target="_blank">mail@straaleterapi.dk</a>
         <div class="logos">

@@ -1,20 +1,12 @@
 <style scoped lang="scss">
-.content {
-  display: flex;
-  flex-direction: row;
-}
-.main {
-  display: flex;
-  flex-direction: column;
-}
 </style>
 
 <template>
-  <div class="container">
+  <div>
     <NavBar v-if="navs && lang" :navs="navs", :lang="lang" />
-    <div class="content">
+    <div class="row">
       <AsideNav v-if="asideNavs" :navs="asideNavs" />
-      <div class="main"> 
+      <div class="col"> 
         <Breadcrumbs v-if="breadcrumbs" :crumbs="breadcrumbs" />
         <slot />
       </div>
@@ -67,7 +59,6 @@ const lang = await extractLang(route.path);
 const navs = makeNavLogic(lang == 'dk' ?
     navigation.value.filter(e => e.path !== "/en") :
     navigation.value.find(e => e.path == "/en").children);
-console.log(navs)
 
 const breadcrumbs = await recursiveBreadcrumbs(navs, current_path);
 

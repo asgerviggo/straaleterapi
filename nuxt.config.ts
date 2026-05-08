@@ -4,5 +4,5 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: ['@nuxt/content'],
-  css: cssPaths(['colors', 'base', 'fonts']),
+  css: cssPaths(['colors', 'base', 'fonts', 'util']),
 })

@@ -1,12 +1,8 @@
 <style scoped lang="scss">
-.main-container {
-  display: flex;
-  flex-direction: row;
-}
 </style>
 
 <template>
-  <section class="main-container">
+  <section class="row">
     <ContentRenderer v-if="page" :value="page" />
   </section>
 </template>
