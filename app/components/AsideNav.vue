@@ -1,27 +1,38 @@
+<style scoped lang="scss">
+.nav-wrapper {
+  margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.nav-item {
+
+}
+</style>
+
 <template>
   <div class="header-wrapper">
     <a id="logo" href="/"></a>
-    <div class="nav-wrapper">
-      <nav>
-        <template v-for="nav in navs">
-          <NuxtLink :to="`${nav.path}`">{{ nav.title }}</NuxtLink>
-          <template v-for="child in nav.children">
-            <AsideNav :navs="child" />
+    <nav class="nav-wrapper">
+      <template v-for="nav in navs">
+        <div class="nav-item">
+          <NuxtLink :to="nav.path">{{ nav.title }}</NuxtLink>
+          <template v-if="nav.children">
+            <AsideNav :navs="nav.children" />
           </template>
-        </template>
-      </nav>
-    </div>
+        </div>
+      </template>
+    </nav>
   </div>
 </template>
 
-<script setup>
-const route = useRoute()
-const { data: navs } = await useAsyncData(route.path, () =>
-  queryCollectionNavigation('about')
-);
-console.log(navs.value);
+<script setup lang="ts">
+type NavigationItem = {
+  title: string,
+  path: string,
+  children?: NavigationItem,
+}
+defineProps<{
+  navs: NavigationItem[] 
+}>()
 </script>
 
-<style scoped>
-
-</style>
