@@ -1,1 +1,0 @@
-../../nyheder-events/[...slug].vue

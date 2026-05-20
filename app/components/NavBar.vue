@@ -27,7 +27,7 @@
       </a>
     </div>
     <div class="nav-wrapper">
-      <nav class="row">
+      <nav class="row" v-if="navs">
         <div v-for="nav in navs" class="nav-item">
           <NuxtLink :to="nav.path">{{ nav.title }}</NuxtLink>
         </div>
@@ -39,13 +39,37 @@
 </template>
 
 <script setup lang="ts">
-type NavigationItem = {
-  title: string,
-  path: string,
-  children?: NavigationItem,
+import { findPageChildren } from '@nuxt/content/utils'
+
+const route = useRoute();
+const router = useRouter();
+
+const {name: collection, prefix, lang, first} = getCollection(route.path)
+
+const { data: navigation } = await useAsyncData(
+  `navigation-${collection}`,
+  () => queryCollectionNavigation(collection)
+    .order('title', 'DESC')
+);
+
+const getNavs = (path: string) => {
+  const content_navs = makeNavLogic(prefix === "" ? navigation.value : findPageChildren(navigation.value, prefix))
+    .map((n, i) => ({...n, navOrder: i}));
+
+
+  const pages_navs = router
+    .getRoutes()
+    .filter(({meta}) => meta.navInclude && meta.lang === lang)
+    .map(({path, meta}) => ({path, ...meta}));
+
+  return [...content_navs, ...pages_navs]
+    .toSorted(({navOrder: a}, {navOrder: b}) => a - b);
 }
-defineProps<{
-  navs: NavigationItem[],
-  lang: string,
-}>()
+
+const navs_val = getNavs(route.path);
+const navs = ref(navs_val);
+watch(route, val => {
+  const navs_val = getNavs(route.path);
+  navs.val = navs_val;
+}, {deep: true, immediate: true})
 </script>

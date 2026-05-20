@@ -2,9 +2,12 @@
 </style>
 
 <template>
-  <template v-for="nav in crumbs">
-    <NuxtLink :to="nav.path">{{ nav.title }}</NuxtLink>
-  </template>
+  <div class="row">
+    <template v-for="nav in crumbs">
+      <NuxtLink :to="nav.path">{{ nav.title }}</NuxtLink>
+      <span>></span>
+    </template>
+  </div>
 </template>
 
 <script setup lang="ts">

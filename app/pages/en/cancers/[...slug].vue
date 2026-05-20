@@ -1,1 +1,0 @@
-../../kraefttyper/[...slug].vue

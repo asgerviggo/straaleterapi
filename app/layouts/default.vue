@@ -3,64 +3,19 @@
 
 <template>
   <div>
-    <NavBar v-if="navs && lang" :navs="navs", :lang="lang" />
-    <div class="row">
-      <AsideNav v-if="asideNavs" :navs="asideNavs" />
-      <div class="col"> 
-        <Breadcrumbs v-if="breadcrumbs" :crumbs="breadcrumbs" />
-        <slot />
-      </div>
-    </div>
+    <NuxtRouteAnnouncer />
+    <NavBar :lang="lang"/>
+    <slot />
     <Footer :lang="lang" />
   </div>
 </template>
 
 <script setup lang="ts">
-const route = await useRoute();
-
-const { data: navigation } = await useAsyncData(
-  'navigation',
-  () => queryCollectionNavigation('main')
-);
-
-const extractor = <T>(matcher: (first: string, rest: string) => {yes:T, no:T}) => async (path: string) => {
-  const [, first, ...rest] = path.split('/');
-  const {yes, no} = matcher(first, rest);
-  return first == 'en' ? yes : no;
-} 
-
-const extractLang = extractor((first, rest) => ({yes: 'en', no: 'dk'}));
-const extractPath = extractor((first, rest) => ({yes: rest, no: [first, ...rest]})); 
-
-const recursiveBreadcrumbs = async (navs: NavigationItem[], paths: string[]) => {
-  const [first, ...rest] = paths;
-  const item = navs.find(n => n.path = `/${first}`);
-  if (rest.length && item.children?.length) {
-    return [item, ...recursiveBreadcrumbs(item.children, rest)];
-  } else {
-    return [item];
-  }
-}
-
-const makeNavLogic = (navi: NavigationItem[]) => {
-  return navi.map(nav => {
-    if (nav.children) {
-      const children = makeNavLogic(nav.children.slice(1))
-      return {...nav.children.at(0), children};
-    } else {
-      return nav;
-    }
-  })
-}
-
-const current_path = await extractPath(route.path);
-const lang = await extractLang(route.path);
-
-const navs = makeNavLogic(lang == 'dk' ?
-    navigation.value.filter(e => e.path !== "/en") :
-    navigation.value.find(e => e.path == "/en").children);
-
-const breadcrumbs = await recursiveBreadcrumbs(navs, current_path);
-
-const asideNavs = navs.find(({path}) => path.slice(1) == current_path[0])?.children
+const route = useRoute();
+const { lang: lang_val } = getCollection(route.path);
+const lang = ref(lang_val);
+watch(route, val => {
+  const { lang: lang_val } = getCollection(route.path);
+  lang.value = lang_val;
+}, {deep: true, immediate: true});
 </script>
